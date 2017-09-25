@@ -57,7 +57,8 @@ namespace CoursesAPI.Services.CoursesServices
                            where c.SemesterID == semester
                            select new CourseInstanceDTO
                            {
-                               Name = ct.Name,
+                               Name_IS = ct.Name_IS,
+                               Name_EN = ct.Name_EN,
                                TemplateID = ct.CourseID,
                                CourseInstanceID = c.ID,
                                MainTeacher = "" // Hint: it should not always return an empty string!
