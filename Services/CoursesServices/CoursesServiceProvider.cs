@@ -45,26 +45,42 @@ namespace CoursesAPI.Services.CoursesServices
         /// </summary>
         /// <param name="semester"></param>
         /// <returns></returns>
-        public List<CourseInstanceDTO> GetCourseInstancesBySemester(string semester = null)
+        public List<CourseInstanceDTO> GetCourseInstancesBySemester(string semester = null, string language = null)
         {
             if (string.IsNullOrEmpty(semester))
             {
                 semester = "20153";
             }
 
-            var courses = (from c in _courseInstances.All()
+            //if (string.IsNullOrEmpty(language) || language == "IS") {
+            if (language == "EN") {
+                var courses = (from c in _courseInstances.All()
                            join ct in _courseTemplates.All() on c.CourseID equals ct.CourseID
                            where c.SemesterID == semester
                            select new CourseInstanceDTO
                            {
-                               Name = ct.Name,
-                               Name_EN = ct.Name_EN,
+                               Name = ct.Name_EN,
                                TemplateID = ct.CourseID,
                                CourseInstanceID = c.ID,
                                MainTeacher = "" // Hint: it should not always return an empty string!
                            }).ToList();
 
-            return courses;
+                return courses;
+            }
+            else { // IS is default choice
+                var courses = (from c in _courseInstances.All()
+                           join ct in _courseTemplates.All() on c.CourseID equals ct.CourseID
+                           where c.SemesterID == semester
+                           select new CourseInstanceDTO
+                           {
+                               Name = ct.Name,
+                               TemplateID = ct.CourseID,
+                               CourseInstanceID = c.ID,
+                               MainTeacher = "" // Hint: it should not always return an empty string!
+                           }).ToList();
+
+                return courses;
+            }
         }
     }
 }
