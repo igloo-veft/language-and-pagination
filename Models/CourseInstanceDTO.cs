@@ -17,9 +17,8 @@ namespace CoursesAPI.Models
 		public string TemplateID       { get; set; }
 
 		/// <summary>
-		/// The name of the course in Icelandic.
-		/// Example: "Vefþjónustur".
-		/// Default value
+		/// The name of the course.
+		/// Example: "Vefþjónustur" or "Web services".
 		/// </summary>
 		public string Name             { get; set; }
 
@@ -27,7 +26,8 @@ namespace CoursesAPI.Models
 		/// The name of the course in English.
 		/// Example: "Web Services".
 		/// </summary>
-		public string Name_EN             { get; set; }
+		/// public string Name_EN             { get; set; }
+		/// not used!
 
 		/// <summary>
 		/// The full name of the main teacher in the course.
