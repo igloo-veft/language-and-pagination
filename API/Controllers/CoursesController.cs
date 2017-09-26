@@ -20,7 +20,7 @@ namespace WebApplication.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetCoursesBySemester(string semester = null, string language = null)
+        public IActionResult GetCoursesBySemester(string semester = null, string language = null, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             // TODO: figure out the requested language (if any!)
             // and pass it to the service provider!
@@ -31,10 +31,10 @@ namespace WebApplication.Controllers
             var languageHeader = Request.Headers["Accept-language"];
 
             if (languageHeader.Contains("en") || languageHeader.Contains("en-us") || languageHeader.Contains("en-gb")) { // handles english
-                return Ok(_service.GetCourseInstancesBySemester(semester, language="EN"));
+                return Ok(_service.GetCourseInstancesBySemester(semester, language="EN", pageNumber, pageSize));
             }
             else { // handles icelandic and default values
-                return Ok(_service.GetCourseInstancesBySemester(semester, language));
+                return Ok(_service.GetCourseInstancesBySemester(semester, language, pageNumber, pageSize));
             }
             
         }
