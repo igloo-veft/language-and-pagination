@@ -55,10 +55,21 @@ namespace CoursesAPI.Services.CoursesServices
 
             List<CourseInstanceDTO> courses;
 
+            /*var courseTest = (from c in _courseInstances.All()
+                                join ct in _courseTemplates.All() on c.CourseID equals ct.CourseID
+                                where c.SemesterID == semester
+                                select new CourseInstanceDTO
+                                {
+                                    Name = ct.Name,
+                                    TemplateID = ct.CourseID,
+                                    CourseInstanceID = c.ID,
+                                    MainTeacher = ""
+                                });*/
+
             //if (string.IsNullOrEmpty(language) || language == "IS") {
             if (language == "EN") {
-                Console.WriteLine("English");
-                var coursesTmp = (from c in _courseInstances.All()
+                //Console.WriteLine("English");
+                courses = (from c in _courseInstances.All()
                                     join ct in _courseTemplates.All() on c.CourseID equals ct.CourseID
                                     where c.SemesterID == semester
                                     select new CourseInstanceDTO
@@ -68,11 +79,10 @@ namespace CoursesAPI.Services.CoursesServices
                                         CourseInstanceID = c.ID,
                                         MainTeacher = "" // Hint: it should not always return an empty string!
                                     }).ToList();
-                courses = coursesTmp;
             }
             else { // IS is default choice
-                Console.WriteLine("Not english");
-                var coursesTmp = (from c in _courseInstances.All()
+                //Console.WriteLine("Not english");
+                courses = (from c in _courseInstances.All()
                                     join ct in _courseTemplates.All() on c.CourseID equals ct.CourseID
                                     where c.SemesterID == semester
                                     select new CourseInstanceDTO
@@ -82,8 +92,6 @@ namespace CoursesAPI.Services.CoursesServices
                                         CourseInstanceID = c.ID,
                                         MainTeacher = "" // Hint: it should not always return an empty string!
                                     }).ToList();
-
-                courses = coursesTmp;
             }
 
             var paging = new Paging {
