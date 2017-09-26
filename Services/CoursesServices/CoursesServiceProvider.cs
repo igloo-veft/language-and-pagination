@@ -53,11 +53,12 @@ namespace CoursesAPI.Services.CoursesServices
                 semester = "20153";
             }
 
-            var courses = new List<CourseInstanceDTO>();
+            List<CourseInstanceDTO> courses;
 
             //if (string.IsNullOrEmpty(language) || language == "IS") {
             if (language == "EN") {
-                courses = (from c in _courseInstances.All()
+                Console.WriteLine("English");
+                var coursesTmp = (from c in _courseInstances.All()
                            join ct in _courseTemplates.All() on c.CourseID equals ct.CourseID
                            where c.SemesterID == semester
                            select new CourseInstanceDTO
@@ -67,9 +68,11 @@ namespace CoursesAPI.Services.CoursesServices
                                CourseInstanceID = c.ID,
                                MainTeacher = "" // Hint: it should not always return an empty string!
                            }).ToList();
+                courses = coursesTmp;
             }
             else { // IS is default choice
-                courses = (from c in _courseInstances.All()
+                Console.WriteLine("Not english");
+                var coursesTmp = (from c in _courseInstances.All()
                            join ct in _courseTemplates.All() on c.CourseID equals ct.CourseID
                            where c.SemesterID == semester
                            select new CourseInstanceDTO
@@ -79,6 +82,8 @@ namespace CoursesAPI.Services.CoursesServices
                                CourseInstanceID = c.ID,
                                MainTeacher = "" // Hint: it should not always return an empty string!
                            }).ToList();
+
+                courses = coursesTmp;
             }
 
             var paging = new Paging {
