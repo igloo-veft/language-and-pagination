@@ -19,8 +19,9 @@ namespace CoursesAPI.Models
 		/// <summary>
 		/// The name of the course in Icelandic.
 		/// Example: "Vefþjónustur".
+		/// Default value
 		/// </summary>
-		public string Name_IS             { get; set; }
+		public string Name             { get; set; }
 
 		/// <summary>
 		/// The name of the course in English.
