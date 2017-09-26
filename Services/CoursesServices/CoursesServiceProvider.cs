@@ -89,7 +89,7 @@ namespace CoursesAPI.Services.CoursesServices
             };
 
             return new Envelope<CourseInstanceDTO> {
-                Items = courses.Skip((pageNumber-1)*pageSize).Take(pageSize),
+                Items = courses.Skip((pageNumber-1)*pageSize).Take(pageSize), // should not be necessary to do ToList() because this is already a list
                 Paging = paging
             };
         }
