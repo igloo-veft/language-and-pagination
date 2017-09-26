@@ -24,6 +24,8 @@ namespace WebApplication.Controllers
         {
             // TODO: figure out the requested language (if any!)
             // and pass it to the service provider!
+
+            // note: inspect the "accept-language" header
             return Ok(_service.GetCourseInstancesBySemester(semester));
         }
 
