@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using CoursesAPI.Models;
 using CoursesAPI.Services.CoursesServices;
@@ -28,9 +29,36 @@ namespace WebApplication.Controllers
             // note: inspect the "accept-language" header
             // should we handle the list creation here or in services? probably better to construct in services and return
             // a CourseInstanceDTO model where Name is the CourseTemplate name in English if language is set to english
-            var languageHeader = Request.Headers["Accept-language"];
+            var languageHeader = Request.Headers["Accept-language"].ToString();
 
-            if (languageHeader.Contains("en") || languageHeader.Contains("en-us") || languageHeader.Contains("en-gb")) { // handles english
+            //Console.WriteLine(languageHeader.GetType());
+            //Console.WriteLine(languageHeader);
+            //Console.WriteLine(languageHeader.ToArray().GetValue(0));
+            //SortedDictionary<String, int> dictionary = new SortedDictionary<String, int>();
+
+            var languages = languageHeader.Split(',')
+                .Select(StringWithQualityHeaderValue.Parse)
+                .OrderByDescending(s => s.Quality.GetValueOrDefault(1)); // doesn't completely work since it doesn't give the topmost language the value of 1
+            
+            //Console.WriteLine(languages.ElementAt(0));
+            //Console.WriteLine(languages.ElementAt(0).Value);
+            //Console.WriteLine(languages.ElementAt(0).Quality);
+            var qIS = 0.0;
+            var hasEnglish = false;
+            for(int i = 0; i < languages.Count(); i++)
+            {
+                if(languages.ElementAt(i).Value.ToLower() == "is")
+                {
+                    qIS = (double) languages.ElementAt(i).Quality;
+                }
+                if(languages.ElementAt(i).Value.ToLower().Contains("en") && languages.ElementAt(i).Quality > qIS)
+                {
+                    hasEnglish = true;
+                }
+            }
+
+            //if (languageHeader.Contains("en") || languageHeader.Contains("en-us") || languageHeader.Contains("en-gb")) {
+            if (hasEnglish) { // handles english
                 return Ok(_service.GetCourseInstancesBySemester(semester, language="EN", pageNumber, pageSize));
             }
             else { // handles icelandic and default values
