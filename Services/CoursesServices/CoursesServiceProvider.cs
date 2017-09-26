@@ -59,29 +59,29 @@ namespace CoursesAPI.Services.CoursesServices
             if (language == "EN") {
                 Console.WriteLine("English");
                 var coursesTmp = (from c in _courseInstances.All()
-                           join ct in _courseTemplates.All() on c.CourseID equals ct.CourseID
-                           where c.SemesterID == semester
-                           select new CourseInstanceDTO
-                           {
-                               Name = ct.Name_EN,
-                               TemplateID = ct.CourseID,
-                               CourseInstanceID = c.ID,
-                               MainTeacher = "" // Hint: it should not always return an empty string!
-                           }).ToList();
+                                    join ct in _courseTemplates.All() on c.CourseID equals ct.CourseID
+                                    where c.SemesterID == semester
+                                    select new CourseInstanceDTO
+                                    {
+                                        Name = ct.Name_EN,
+                                        TemplateID = ct.CourseID,
+                                        CourseInstanceID = c.ID,
+                                        MainTeacher = "" // Hint: it should not always return an empty string!
+                                    }).ToList();
                 courses = coursesTmp;
             }
             else { // IS is default choice
                 Console.WriteLine("Not english");
                 var coursesTmp = (from c in _courseInstances.All()
-                           join ct in _courseTemplates.All() on c.CourseID equals ct.CourseID
-                           where c.SemesterID == semester
-                           select new CourseInstanceDTO
-                           {
-                               Name = ct.Name,
-                               TemplateID = ct.CourseID,
-                               CourseInstanceID = c.ID,
-                               MainTeacher = "" // Hint: it should not always return an empty string!
-                           }).ToList();
+                                    join ct in _courseTemplates.All() on c.CourseID equals ct.CourseID
+                                    where c.SemesterID == semester
+                                    select new CourseInstanceDTO
+                                    {
+                                        Name = ct.Name,
+                                        TemplateID = ct.CourseID,
+                                        CourseInstanceID = c.ID,
+                                        MainTeacher = "" // Hint: it should not always return an empty string!
+                                    }).ToList();
 
                 courses = coursesTmp;
             }
