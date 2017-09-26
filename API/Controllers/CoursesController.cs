@@ -21,7 +21,7 @@ namespace WebApplication.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetCoursesBySemester(string semester = null, string language = null, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        public IActionResult GetCoursesBySemester(string semester = null, string language = "", [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             // TODO: figure out the requested language (if any!)
             // and pass it to the service provider!
@@ -49,7 +49,13 @@ namespace WebApplication.Controllers
             {
                 if(languages.ElementAt(i).Value.ToLower() == "is")
                 {
-                    qIS = (double) languages.ElementAt(i).Quality;
+                    if(languages.ElementAt(i).Quality == null)
+                    {
+                        qIS = 1.0;
+                    }
+                    else {
+                        qIS = (double) languages.ElementAt(i).Quality;
+                    }
                 }
                 if(languages.ElementAt(i).Value.ToLower().Contains("en") && languages.ElementAt(i).Quality > qIS)
                 {
