@@ -23,13 +23,6 @@ namespace CoursesAPI.Models
 		public string Name             { get; set; }
 
 		/// <summary>
-		/// The name of the course in English.
-		/// Example: "Web Services".
-		/// </summary>
-		/// public string Name_EN             { get; set; }
-		/// not used!
-
-		/// <summary>
 		/// The full name of the main teacher in the course.
 		/// If no teacher is defined, this property will be empty.
 		/// </summary>
