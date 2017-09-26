@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using CoursesAPI.Models;
 using CoursesAPI.Services.DataAccess;
 using CoursesAPI.Services.Exceptions;
@@ -45,16 +46,18 @@ namespace CoursesAPI.Services.CoursesServices
         /// </summary>
         /// <param name="semester"></param>
         /// <returns></returns>
-        public List<CourseInstanceDTO> GetCourseInstancesBySemester(string semester = null, string language = null)
+        public Envelope<CourseInstanceDTO> GetCourseInstancesBySemester(string semester, string language, int pageNumber, int pageSize)
         {
             if (string.IsNullOrEmpty(semester))
             {
                 semester = "20153";
             }
 
+            var courses = new List<CourseInstanceDTO>();
+
             //if (string.IsNullOrEmpty(language) || language == "IS") {
             if (language == "EN") {
-                var courses = (from c in _courseInstances.All()
+                courses = (from c in _courseInstances.All()
                            join ct in _courseTemplates.All() on c.CourseID equals ct.CourseID
                            where c.SemesterID == semester
                            select new CourseInstanceDTO
@@ -64,11 +67,9 @@ namespace CoursesAPI.Services.CoursesServices
                                CourseInstanceID = c.ID,
                                MainTeacher = "" // Hint: it should not always return an empty string!
                            }).ToList();
-
-                return courses;
             }
             else { // IS is default choice
-                var courses = (from c in _courseInstances.All()
+                courses = (from c in _courseInstances.All()
                            join ct in _courseTemplates.All() on c.CourseID equals ct.CourseID
                            where c.SemesterID == semester
                            select new CourseInstanceDTO
@@ -78,9 +79,19 @@ namespace CoursesAPI.Services.CoursesServices
                                CourseInstanceID = c.ID,
                                MainTeacher = "" // Hint: it should not always return an empty string!
                            }).ToList();
-
-                return courses;
             }
+
+            var paging = new Paging {
+                PageCount = (int)Math.Ceiling(courses.Count / (double)pageSize),
+                PageSize = pageSize,
+                PageNumber = pageNumber,
+                TotalNumberOfItems = courses.Count
+            };
+
+            return new Envelope<CourseInstanceDTO> {
+                Items = courses.Skip((pageNumber-1)*pageSize).Take(pageSize),
+                Paging = paging
+            };
         }
     }
 }
