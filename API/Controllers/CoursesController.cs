@@ -20,13 +20,23 @@ namespace WebApplication.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetCoursesBySemester(string semester = null)
+        public IActionResult GetCoursesBySemester(string semester = null, string language = null)
         {
             // TODO: figure out the requested language (if any!)
             // and pass it to the service provider!
 
             // note: inspect the "accept-language" header
-            return Ok(_service.GetCourseInstancesBySemester(semester));
+            // should we handle the list creation here or in services? probably better to construct in services and return
+            // a CourseInstanceDTO model where Name is the CourseTemplate name in English if language is set to english
+            var languageHeader = Request.Headers["Accept-language"];
+
+            if (languageHeader.Contains("en") || languageHeader.Contains("en-us") || languageHeader.Contains("en-gb")) { // handles english
+                return Ok(_service.GetCourseInstancesBySemester(semester, language="EN"));
+            }
+            else { // handles icelandic and default values
+                return Ok(_service.GetCourseInstancesBySemester(semester, language));
+            }
+            
         }
 
         /// <summary>
